@@ -11,6 +11,32 @@ export enum HKWorkoutActivityType {
   traditionalStrengthTrainin = 'Traditional Strength Training'
 }
 
+export type heartRateZones = 1 | 2 | 3 | 4 | 5
+export enum DistanceUnits {
+  yards = 'yds',
+  miles = 'mi',
+  meters = 'm',
+  kilometers = 'km'
+}
+export enum EnergyUnits {
+  calories = 'calories',
+  kilocalories = 'kilocalories'
+}
+export enum TimeUnits {
+  seconds = 'sec',
+  minutes = 'min',
+  hours = 'hrs'
+}
+export enum IntervalStepPurpose {
+  recovery = 'recovery',
+  work = 'work'
+}
+
+interface RangeBasedAlert {
+  lowerBound: number
+  upperBound: number
+}
+
 export enum WorkoutGoalTypes {
   open = 'Open',
   distance = 'Distance',
@@ -18,14 +44,26 @@ export enum WorkoutGoalTypes {
   time = 'Time'
 }
 
-export enum WorkoutGoalUnits {
-  minutes = 'Minutes'
+export interface OpenWorkoutGoal {
+  type: WorkoutGoalTypes.open
 }
 
-export interface WorkoutGoal {
-  type: WorkoutGoalTypes,
-  targetDuration: number,
-  unit: WorkoutGoalUnits
+export interface DistanceWorkoutGoal {
+  type: WorkoutGoalTypes.distance
+  distance: number
+  unit: DistanceUnits
+}
+
+export interface EnergyWorkoutGoal {
+  type: WorkoutGoalTypes.energy
+  amount: number
+  unit: EnergyUnits
+}
+
+export interface TimeWorkoutGoal {
+  type: WorkoutGoalTypes.time
+  duration: number
+  unit: TimeUnits
 }
 
 export enum workoutType {
@@ -35,18 +73,55 @@ export enum workoutType {
   customWorkout = 'Custom',
 }
 
-export enum WorkoutAlert {
-  heartRateZone = 'Heartrate Zone'
+export enum WorkoutAlertTypes {
+  heartRateZone = 'Heart Rate Zone',
+  heartRateRange = 'Heart Rate Range',
+  cadenceRange = 'Cadence Range',
+  cadenceThreshold = 'Cadence Threshold',
+  powerRange = 'Power Range',
+  powerThreshold = 'Power Threshold',
+  powerZone = 'Power Zone',
+  speedRange = 'Speed Range',
+  speedThreshold = 'Speed Threshold'
+}
+
+export type HeartRateZoneAlert = {
+  type: WorkoutAlertTypes.heartRateZone
+  zone: heartRateZones
+}
+
+export interface HeartRateRangeAlert extends RangeBasedAlert {
+  type: WorkoutAlertTypes.heartRateRange
+}
+
+export interface CadenceRangeAlert extends RangeBasedAlert {
+  type: WorkoutAlertTypes.cadenceRange
+}
+
+export interface CadenceThresholdAlert {
+  type: WorkoutAlertTypes.cadenceThreshold
+  cadence: number
+}
+
+export interface SpeedRangeAlert extends RangeBasedAlert {
+  type: WorkoutAlertTypes.speedRange
+}
+
+export interface SpeedThresholdAlert {
+  type: WorkoutAlertTypes.cadenceThreshold
+  targetSpeed: number
+  targetSpeedMetric: 'mph' | 'kph'
+  metric: 'current' | 'average'
 }
 
 export interface IntervalStep {
-  purpose: 'work'
-  alert: WorkoutAlert
-  goal: WorkoutGoal
+  purpose: IntervalStepPurpose,
+  alert: HeartRateRangeAlert | HeartRateZoneAlert | CadenceRangeAlert
+  goal: OpenWorkoutGoal | TimeWorkoutGoal | EnergyWorkoutGoal | DistanceWorkoutGoal
 }
 
-export interface Interval {
-  type: 'work' | 'workRecovery'
+export interface IntervalBlock {
+  type: 'work' | 'recovery'
   iterations: number
   steps: IntervalStep[]
 }
@@ -69,18 +144,13 @@ export interface WorkoutPlan {
   location: 'indoor' | 'outdoor'
   displayName: string
   warmup?: {
-    alert: {
-      type: WorkoutAlert
-      zone: 1 | 2 | 3 | 4 | 5
-    },
-    goal: {
-      type: 'time'
-    }
+    alert: HeartRateRangeAlert | HeartRateZoneAlert | CadenceRangeAlert,
+    goal: OpenWorkoutGoal | TimeWorkoutGoal | EnergyWorkoutGoal | DistanceWorkoutGoal,
   },
-  blocks: Interval[],
+  blocks: IntervalBlock[],
   cooldown?: {
-    alert: WorkoutAlert
-    goal: WorkoutGoal
+    alert: HeartRateRangeAlert | HeartRateZoneAlert | CadenceRangeAlert
+    goal: OpenWorkoutGoal | TimeWorkoutGoal | EnergyWorkoutGoal | DistanceWorkoutGoal
   }
 }
 
