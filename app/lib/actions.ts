@@ -1,36 +1,30 @@
 'use server'
 
+import { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_CALLBACK_REF_RETURN_VALUES } from "react"
 import { WorkoutGoalTypes, workoutType } from "../utils/workouts"
 
-
-export async function createWorkout(formData: FormData) {
-  const payload = Object.fromEntries(formData.entries())
-  const goalSelectMenu = formData.get("goalSelectMenu")
-
-  // Set workout type
+export function setWorkoutType(goalSelectMenu: string | undefined) {
   switch (goalSelectMenu) {
     case 'distance':
     case 'time':
     case 'calories':
     case 'open':
-      payload.workoutType = workoutType.singleGoalWorkout
-      break
+      return workoutType.singleGoalWorkout
     case 'pacer':
-      payload.workoutType = workoutType.pacerWorkout
-      break
+      return workoutType.pacerWorkout
     case 'custom':
-      payload.workoutType = workoutType.customWorkout
-      break
+      return workoutType.customWorkout
   }
+  return workoutType.singleGoalWorkout
+}
 
-  // Set workout goal
+export function setGoal(goalSelectMenu: string | undefined) {
   switch (goalSelectMenu) {
     // case 'distance':
     // case 'time':
     // case 'calories':
     case 'open':
-      payload.goal = WorkoutGoalTypes.open
-      break
+      return WorkoutGoalTypes.open
     // case 'pacer':
     //   payload.workoutType = workoutType.pacerWorkout
     //   break
@@ -38,9 +32,27 @@ export async function createWorkout(formData: FormData) {
     //   payload.workoutType = workoutType.customWorkout
     //   break
   }
+  return WorkoutGoalTypes.open
+}
 
+export function cleanUpPayload(payload) {
   delete payload.goalSelectMenu
+  return payload
+}
+
+export async function createWorkout(formData: FormData) {
+  let payload = Object.fromEntries(formData.entries())
+  const goalSelectMenu = formData.get("goalSelectMenu")?.toString()
+
+  // Set workout type
+  payload.workoutType = setWorkoutType(goalSelectMenu)
+
+  // Set workout goal
+  payload.goal = setGoal(goalSelectMenu)
+
+  payload = cleanUpPayload(payload)
 
 
   console.log('payload: ', payload)
 }
+
