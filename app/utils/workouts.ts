@@ -1,14 +1,14 @@
 export enum HKWorkoutActivityType {
-  swimming = 'Swimming',
-  cycling = 'Cycling',
-  running = 'Running',
-  swimBikeRun = 'Swim Bike Run',
-  transition = 'Multisport Transition',
-  preparationAndRecovery = 'Preparation and Recovery',
-  cooldown = 'Cooldown',
-  coreTraining = 'Core Training',
-  functionalStrengthTraining = 'Functional Strength Training',
-  traditionalStrengthTrainin = 'Traditional Strength Training'
+  swimming = 'Swim',
+  cycling = 'Bike',
+  running = 'Run',
+  swimBikeRun = 'Swim-Bike-Run / Multisport',
+  // transition = 'Multisport Transition',
+  // preparationAndRecovery = 'Preparation and Recovery',
+  // cooldown = 'Cooldown',
+  // coreTraining = 'Core Training',
+  // functionalStrengthTraining = 'Functional Strength Training',
+  // traditionalStrengthTrainin = 'Traditional Strength Training'
 }
 
 export type heartRateZones = 1 | 2 | 3 | 4 | 5
@@ -38,10 +38,10 @@ interface RangeBasedAlert {
 }
 
 export enum WorkoutGoalTypes {
-  open = 'Open',
-  distance = 'Distance',
-  energy = 'Energy',
-  time = 'Time'
+  open = 'open',
+  distance = 'distance',
+  energy = 'energy',
+  time = 'time'
 }
 
 export interface OpenWorkoutGoal {
@@ -67,10 +67,10 @@ export interface TimeWorkoutGoal {
 }
 
 export enum workoutType {
-  singleGoalWorkout = 'Single Goal',
-  pacerWorkout = 'Pacer',
-  swimBikeRunWorkout = 'Swim-Bike-Run / Multisport',
-  customWorkout = 'Custom',
+  singleGoalWorkout = 'singleGoalWorkout',
+  pacerWorkout = 'pacerWorkout',
+  swimBikeRunWorkout = 'swimBikeRunWorkout',
+  customWorkout = 'customWorkout'
 }
 
 export enum WorkoutAlertTypes {
@@ -140,14 +140,15 @@ export function workoutGoals() {
 
 export interface WorkoutPlan {
   workoutType: workoutType
-  activityType: HKWorkoutActivityType
+  activity: HKWorkoutActivityType
   location: 'indoor' | 'outdoor'
   displayName: string
+  goal?: OpenWorkoutGoal | TimeWorkoutGoal | EnergyWorkoutGoal | DistanceWorkoutGoal
   warmup?: {
     alert: HeartRateRangeAlert | HeartRateZoneAlert | CadenceRangeAlert,
     goal: OpenWorkoutGoal | TimeWorkoutGoal | EnergyWorkoutGoal | DistanceWorkoutGoal,
   },
-  blocks: IntervalBlock[],
+  blocks?: IntervalBlock[],
   cooldown?: {
     alert: HeartRateRangeAlert | HeartRateZoneAlert | CadenceRangeAlert
     goal: OpenWorkoutGoal | TimeWorkoutGoal | EnergyWorkoutGoal | DistanceWorkoutGoal
