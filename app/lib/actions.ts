@@ -1,7 +1,6 @@
 'use server'
 
-import { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_CALLBACK_REF_RETURN_VALUES } from "react"
-import { WorkoutGoalTypes, workoutType } from "../utils/workouts"
+import { WorkoutGoalTypes, WorkoutPlan, workoutType } from "../utils/workouts"
 
 export function setWorkoutType(goalSelectMenu: string | undefined) {
   switch (goalSelectMenu) {
@@ -35,7 +34,7 @@ export function setGoal(goalSelectMenu: string | undefined) {
   return WorkoutGoalTypes.open
 }
 
-export function cleanUpPayload(payload) {
+export function cleanUpPayload(payload: object) {
   delete payload.goalSelectMenu
   return payload
 }
@@ -50,7 +49,7 @@ export async function createWorkout(formData: FormData) {
   // Set workout goal
   payload.goal = setGoal(goalSelectMenu)
 
-  payload = cleanUpPayload(payload)
+  payload = cleanUpPayload({ payload })
 
 
   console.log('payload: ', payload)
