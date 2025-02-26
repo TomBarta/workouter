@@ -143,6 +143,7 @@ export interface WorkoutPlan {
   activity: HKWorkoutActivityType
   location: 'indoor' | 'outdoor'
   displayName: string
+  swimmingLocation: 'indoors'
   goal?: OpenWorkoutGoal | TimeWorkoutGoal | EnergyWorkoutGoal | DistanceWorkoutGoal
   warmup?: {
     alert: HeartRateRangeAlert | HeartRateZoneAlert | CadenceRangeAlert,

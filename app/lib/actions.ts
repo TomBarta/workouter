@@ -1,6 +1,10 @@
 'use server'
 
-import { WorkoutGoalTypes, WorkoutPlan, workoutType } from "../utils/workouts"
+import { OpenWorkoutGoal, WorkoutGoalTypes, WorkoutPlan, workoutType } from "../utils/workouts"
+export interface Payload extends WorkoutPlan {
+  swimmingLocation: 'indoors'
+  goalSelectMenu?: string
+}
 
 export function setWorkoutType(goalSelectMenu: string | undefined) {
   switch (goalSelectMenu) {
@@ -17,13 +21,13 @@ export function setWorkoutType(goalSelectMenu: string | undefined) {
   return workoutType.singleGoalWorkout
 }
 
-export function setGoal(goalSelectMenu: string | undefined) {
+export function setGoal(goalSelectMenu: string | undefined): WorkoutPlan['goal'] {
   switch (goalSelectMenu) {
     // case 'distance':
     // case 'time':
     // case 'calories':
     case 'open':
-      return WorkoutGoalTypes.open
+      return { type: WorkoutGoalTypes.open }
     // case 'pacer':
     //   payload.workoutType = workoutType.pacerWorkout
     //   break
@@ -31,16 +35,17 @@ export function setGoal(goalSelectMenu: string | undefined) {
     //   payload.workoutType = workoutType.customWorkout
     //   break
   }
-  return WorkoutGoalTypes.open
+  return { type: WorkoutGoalTypes.open }
 }
 
-export function cleanUpPayload(payload: object) {
+export function cleanUpPayload(payload: Payload): WorkoutPlan {
+  payload.swimmingLocation = 'indoors'
   delete payload.goalSelectMenu
   return payload
 }
 
 export async function createWorkout(formData: FormData) {
-  let payload = Object.fromEntries(formData.entries())
+  let payload = Object.fromEntries(formData.entries()) as unknown as Payload
   const goalSelectMenu = formData.get("goalSelectMenu")?.toString()
 
   // Set workout type
@@ -49,7 +54,7 @@ export async function createWorkout(formData: FormData) {
   // Set workout goal
   payload.goal = setGoal(goalSelectMenu)
 
-  payload = cleanUpPayload({ payload })
+  payload = cleanUpPayload(payload)
 
 
   console.log('payload: ', payload)

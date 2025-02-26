@@ -1,10 +1,19 @@
 
-import { setGoal, setWorkoutType } from '@/app/lib/actions'
-import { WorkoutGoalTypes, workoutType } from '@/app/utils/workouts'
+import { cleanUpPayload, Payload, setGoal, setWorkoutType } from '@/app/lib/actions'
+import { HKWorkoutActivityType, WorkoutGoalTypes, workoutType } from '@/app/utils/workouts'
 import { describe, expect, test } from 'vitest'
 
 
+const testPayload: Payload = {
+  workoutType: workoutType.singleGoalWorkout,
+  activity: HKWorkoutActivityType.running,
+  location: "indoor",
+  displayName: 'test display name',
+  goalSelectMenu: 'running'
+}
+
 describe('page action helper functions', () => {
+
   test.each([
     ['distance', workoutType.singleGoalWorkout],
     ['time', workoutType.singleGoalWorkout],
@@ -13,10 +22,19 @@ describe('page action helper functions', () => {
   ])('setWorkoutType(%s)', (arg, expected) => {
     expect(setWorkoutType(arg)).toBe(expected)
   })
+
   test.each([
-    ['open', WorkoutGoalTypes.open],
+    ['open', { type: WorkoutGoalTypes.open }],
+    [undefined, { type: WorkoutGoalTypes.open }],
   ])('setGoal(%s)', (arg, expected) => {
-    expect(setGoal(arg)).toBe(expected)
+    expect(setGoal(arg)).toMatchObject(expected)
+  })
+
+  test.each([
+    [testPayload],
+  ])('cleanUpPayload(%s)', (arg) => {
+    delete testPayload.goalSelectMenu
+    expect(cleanUpPayload(arg)).toBe(testPayload)
   })
 })
 
