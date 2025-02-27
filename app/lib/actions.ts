@@ -1,48 +1,6 @@
 'use server'
 
-import { OpenWorkoutGoal, WorkoutGoalTypes, WorkoutPlan, workoutType } from "../utils/workouts"
-export interface Payload extends WorkoutPlan {
-  swimmingLocation: 'indoors'
-  goalSelectMenu?: string
-}
-
-export function setWorkoutType(goalSelectMenu: string | undefined) {
-  switch (goalSelectMenu) {
-    case 'distance':
-    case 'time':
-    case 'calories':
-    case 'open':
-      return workoutType.singleGoalWorkout
-    case 'pacer':
-      return workoutType.pacerWorkout
-    case 'custom':
-      return workoutType.customWorkout
-  }
-  return workoutType.singleGoalWorkout
-}
-
-export function setGoal(goalSelectMenu: string | undefined): WorkoutPlan['goal'] {
-  switch (goalSelectMenu) {
-    // case 'distance':
-    // case 'time':
-    // case 'calories':
-    case 'open':
-      return { type: WorkoutGoalTypes.open }
-    // case 'pacer':
-    //   payload.workoutType = workoutType.pacerWorkout
-    //   break
-    // case 'custom':
-    //   payload.workoutType = workoutType.customWorkout
-    //   break
-  }
-  return { type: WorkoutGoalTypes.open }
-}
-
-export function cleanUpPayload(payload: Payload): WorkoutPlan {
-  payload.swimmingLocation = 'indoors'
-  delete payload.goalSelectMenu
-  return payload
-}
+import { cleanUpPayload, Payload, setGoal, setWorkoutType } from "./pageActionUtils"
 
 export async function createWorkout(formData: FormData) {
   let payload = Object.fromEntries(formData.entries()) as unknown as Payload
@@ -58,5 +16,15 @@ export async function createWorkout(formData: FormData) {
 
 
   console.log('payload: ', payload)
+
+  const response = await fetch(`http://127.0.0.1:8080/workout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+  const result = await response.json(); // update this to handle a response that includes a binary file ai!
+  return result;
 }
 
