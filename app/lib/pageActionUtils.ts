@@ -44,7 +44,13 @@ export function setGoal(goalSelectMenu: string | undefined): WorkoutPlan['goal']
 export function cleanUpPayload(payload: Payload): WorkoutPlan {
     // Create a new object to avoid modifying the original
     const result = { ...payload };
+    
+    // Ensure swimmingLocation is set
     result.swimmingLocation = 'indoors';
-    delete result.goalSelectMenu;
-    return result;
+    
+    // Remove goalSelectMenu property
+    const { goalSelectMenu, ...cleanPayload } = result;
+    
+    // Return a new object without the goalSelectMenu property
+    return cleanPayload as WorkoutPlan;
 }

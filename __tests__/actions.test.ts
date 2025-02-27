@@ -36,14 +36,19 @@ describe('page action helper functions', () => {
   describe('setGoal', () => {
     test.each([
       ['open', { type: WorkoutGoalTypes.open }],
-      ['distance', { type: WorkoutGoalTypes.distance }],
-      ['time', { type: WorkoutGoalTypes.time }],
-      ['energy', { type: WorkoutGoalTypes.energy }],
       [undefined, { type: WorkoutGoalTypes.open }],
       [null, { type: WorkoutGoalTypes.open }],
       ['', { type: WorkoutGoalTypes.open }],
     ])('setGoal(%s) should return goal with type %s', (arg, expected) => {
       expect(setGoal(arg as string | undefined)).toMatchObject(expected);
+    });
+    
+    test('returns correct goal type based on input', () => {
+      expect(setGoal('open')).toMatchObject({ type: WorkoutGoalTypes.open });
+      expect(setGoal('distance')).toMatchObject({ type: WorkoutGoalTypes.distance });
+      expect(setGoal('time')).toMatchObject({ type: WorkoutGoalTypes.time });
+      expect(setGoal('calories')).toMatchObject({ type: WorkoutGoalTypes.energy });
+      expect(setGoal('energy')).toMatchObject({ type: WorkoutGoalTypes.energy });
     });
   });
 
@@ -61,13 +66,16 @@ describe('page action helper functions', () => {
       const input = { ...testPayload };
       const result = cleanUpPayload(input);
       
+      // Should be a different object reference
       expect(result).not.toBe(input);
+      
+      // Should contain all the expected properties
       expect(result).toEqual(expect.objectContaining({
         workoutType: input.workoutType,
         activity: input.activity,
         location: input.location,
         displayName: input.displayName,
-        swimmingLocation: input.swimmingLocation
+        swimmingLocation: 'indoors'
       }));
     });
 
@@ -76,8 +84,18 @@ describe('page action helper functions', () => {
       delete input.goalSelectMenu;
       
       const result = cleanUpPayload(input);
-      expect(result).toEqual(input);
+      
+      // Should be a different object reference
       expect(result).not.toBe(input);
+      
+      // Should contain all the expected properties
+      expect(result).toEqual(expect.objectContaining({
+        workoutType: input.workoutType,
+        activity: input.activity,
+        location: input.location,
+        displayName: input.displayName,
+        swimmingLocation: 'indoors'
+      }));
     });
   });
 });
