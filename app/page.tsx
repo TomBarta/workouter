@@ -61,9 +61,9 @@ function getWorkoutGoalInput(type: WorkoutGoalTypes) {
 }
 
 interface WorkoutActionResult {
-  success?: boolean;
-  blob?: Blob;
-  data?: string;
+  success?: boolean
+  blob?: Blob
+  data?: string
 }
 
 export default function Index() {

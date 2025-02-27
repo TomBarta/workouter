@@ -31,12 +31,6 @@ export function setGoal(goalSelectMenu: string | undefined): WorkoutPlan['goal']
             return { type: WorkoutGoalTypes.energy }
         case 'open':
             return { type: WorkoutGoalTypes.open }
-        // case 'pacer':
-        //   payload.workoutType = workoutType.pacerWorkout
-        //   break
-        // case 'custom':
-        //   payload.workoutType = workoutType.customWorkout
-        //   break
     }
     return { type: WorkoutGoalTypes.open }
 }

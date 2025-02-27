@@ -1,6 +1,6 @@
 import { cleanUpPayload, Payload, setGoal, setWorkoutType } from '@/app/lib/pageActionUtils'
 import { HKWorkoutActivityType, WorkoutGoalTypes, workoutType } from '@/app/utils/workouts'
-import { describe, expect, test, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, test } from 'vitest'
 
 describe('page action helper functions', () => {
   let testPayload: Payload;

@@ -14,7 +14,6 @@ export async function createWorkout(formData: FormData) {
 
   payload = cleanUpPayload(payload)
 
-
   console.log('payload: ', payload)
 
   const response = await fetch(`http://127.0.0.1:8080/workout`, {
