@@ -1,5 +1,5 @@
 
-import { cleanUpPayload, Payload, setGoal, setWorkoutType } from '@/app/lib/actions'
+import { cleanUpPayload, Payload, setGoal, setWorkoutType } from '@/app/lib/pageActionUtils'
 import { HKWorkoutActivityType, WorkoutGoalTypes, workoutType } from '@/app/utils/workouts'
 import { describe, expect, test } from 'vitest'
 

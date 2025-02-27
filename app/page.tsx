@@ -59,7 +59,7 @@ export default function Index() {
       const url = window.URL.createObjectURL(actionResult.blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'workout.workout'; // Default filename
+      a.download = 'workout-1.workout'; // Default filename
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
