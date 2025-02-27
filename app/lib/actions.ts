@@ -24,7 +24,19 @@ export async function createWorkout(formData: FormData) {
     },
     body: JSON.stringify(payload),
   });
-  const result = await response.json(); // update this to handle a response that includes a binary file ai!
-  return result;
+  const contentType = response.headers.get('Content-Type');
+  
+  if (contentType && contentType.includes('application/json')) {
+    const result = await response.json();
+    return result;
+  } else if (contentType && contentType.includes('application/octet-stream')) {
+    // Handle binary file response
+    const blob = await response.blob();
+    return { success: true, blob };
+  } else {
+    // Handle other response types or fallback
+    const text = await response.text();
+    return { success: response.ok, data: text };
+  }
 }
 
