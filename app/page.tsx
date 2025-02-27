@@ -106,14 +106,6 @@ export default function Index() {
                 <div>
                   <label className="form-control w-full max-w-xs">
                     <div className="label sr-only">
-                      <span className="label-text">Name</span>
-                    </div>
-                    <input name="displayName" type="text" placeholder="Name" className="input input-bordered w-full max-w-xs" />
-                  </label>
-                </div>
-                <div>
-                  <label className="form-control w-full max-w-xs">
-                    <div className="label sr-only">
                       <span className="label-text">Sport</span>
                     </div>
                     <select name="activityType" className="select select-bordered">
@@ -161,6 +153,14 @@ export default function Index() {
                     </div>
                     <div className="pt-2">
                       {getWorkoutGoalInput(formState?.goal as WorkoutGoalTypes)}
+                    </div>
+                    <div className="pt-2">
+                      <label className="form-control w-full max-w-xs">
+                        <div className="label sr-only">
+                          <span className="label-text">Name</span>
+                        </div>
+                        <input name="displayName" type="text" placeholder="Name" className="input input-bordered w-full max-w-xs" />
+                      </label>
                     </div>
                   </>
                 )}
