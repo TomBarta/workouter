@@ -69,7 +69,7 @@ export default function Index() {
                       <div className="label sr-only">
                         <span className="label-text">Sport</span>
                       </div>
-                      <select name="activity" className="select select-bordered">
+                      <select name="activityType" className="select select-bordered">
                         <option disabled selected defaultValue="Select sport">Sport</option>
                         {activities().map(([value, activity]) => (<option key={value} value={value}>{activity}</option>))}
                       </select>

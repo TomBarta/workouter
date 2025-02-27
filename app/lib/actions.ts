@@ -25,14 +25,14 @@ export async function createWorkout(formData: FormData) {
     body: JSON.stringify(payload),
   });
   const contentType = response.headers.get('Content-Type');
-  
+
   if (contentType && contentType.includes('application/json')) {
     const result = await response.json();
     return result;
   } else if (contentType && contentType.includes('application/octet-stream')) {
     // Handle binary file response
     const blob = await response.blob();
-    return { success: true, blob };
+    return { success: true, blob }; // update page.tsx to download the blob ai!
   } else {
     // Handle other response types or fallback
     const text = await response.text();
