@@ -3,6 +3,7 @@ import { useActionState } from "react";
 import { activities, DistanceUnits, EnergyUnits, HKWorkoutActivityType, TimeUnits, workoutGoals, WorkoutGoalTypes, workoutType, workoutTypes } from "./utils/workouts";
 import Form from 'next/form'
 import { createWorkout } from "./lib/actions";
+import { useEffect, useState } from "react";
 
 function handleFormAction(state: any, event: any) {
   const { name, value } = event.target
@@ -50,6 +51,22 @@ function getWorkoutGoalInput(type: WorkoutGoalTypes) {
 
 export default function Index() {
   const [formState, handleFormChange] = useActionState(handleFormAction, {})
+  const [actionResult, setActionResult] = useState<any>(null);
+  
+  // Handle blob download when action returns a blob
+  useEffect(() => {
+    if (actionResult?.success && actionResult?.blob) {
+      const url = window.URL.createObjectURL(actionResult.blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'workout.workout'; // Default filename
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }
+  }, [actionResult]);
+
   console.log(formState)
   return (
     <>
@@ -63,7 +80,11 @@ export default function Index() {
                 For free.
               </p>
               <div>
-                <Form action={createWorkout} onChange={handleFormChange}>
+                <Form action={async (formData) => {
+                  const result = await createWorkout(formData);
+                  setActionResult(result);
+                  return result;
+                }} onChange={handleFormChange}>
                   <div className="">
                     <label className="form-control w-full max-w-xs">
                       <div className="label sr-only">

@@ -32,7 +32,7 @@ export async function createWorkout(formData: FormData) {
   } else if (contentType && contentType.includes('application/octet-stream')) {
     // Handle binary file response
     const blob = await response.blob();
-    return { success: true, blob }; // update page.tsx to download the blob ai!
+    return { success: true, blob };
   } else {
     // Handle other response types or fallback
     const text = await response.text();
