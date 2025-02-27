@@ -117,7 +117,7 @@ export default function Index() {
                   </label>
                 </div>
 
-                {formState?.activity !== 'swimBikeRun' && (
+                {formState?.activityType !== 'swimBikeRun' && (
                   <div className="pt-2">
                     <label className="form-control w-full max-w-xs">
                       <div className="label sr-only">
