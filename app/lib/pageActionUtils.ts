@@ -22,9 +22,13 @@ export function setWorkoutType(goalSelectMenu: string | undefined) {
 
 export function setGoal(goalSelectMenu: string | undefined): WorkoutPlan['goal'] {
     switch (goalSelectMenu) {
-        // case 'distance':
-        // case 'time':
-        // case 'calories':
+        case 'distance':
+            return { type: WorkoutGoalTypes.distance }
+        case 'time':
+            return { type: WorkoutGoalTypes.time }
+        case 'energy':
+        case 'calories':
+            return { type: WorkoutGoalTypes.energy }
         case 'open':
             return { type: WorkoutGoalTypes.open }
         // case 'pacer':
@@ -38,7 +42,9 @@ export function setGoal(goalSelectMenu: string | undefined): WorkoutPlan['goal']
 }
 
 export function cleanUpPayload(payload: Payload): WorkoutPlan {
-    payload.swimmingLocation = 'indoors'
-    delete payload.goalSelectMenu
-    return payload
+    // Create a new object to avoid modifying the original
+    const result = { ...payload };
+    result.swimmingLocation = 'indoors';
+    delete result.goalSelectMenu;
+    return result;
 }
